@@ -9,6 +9,7 @@ import java.util.Scanner;
  */
 public class Decoder {
     private static boolean checkValid(ArrayList<String> lines) {
+        // check first line is an integer
         int number;
         try {
             number = Integer.parseInt(lines.get(0));
@@ -16,6 +17,12 @@ public class Decoder {
             return false;
         }
 
+        // Return FALSE if the 2nd string contains anything different than lowercase chars
+        if (!lines.get(1).matches("[a-z]+")) {
+            return false;
+        }
+
+        // return TRUE if all is valid
         return true;
     }
 
@@ -31,8 +38,8 @@ public class Decoder {
                 lines.add(in.next());
             }
 
-            System.out.print(checkValid(lines));
-
+            System.out.println(checkValid(lines));
+//            checkValid(lines);
         } catch (FileNotFoundException up) {
             System.out.print("File not found: " + file_path);
         }
