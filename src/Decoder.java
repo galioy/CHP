@@ -1,5 +1,3 @@
-import sun.nio.ch.IOUtil;
-
 import java.io.*;
 import java.util.ArrayList;
 import java.util.Scanner;
@@ -44,7 +42,10 @@ public class Decoder {
 
 
     public static void main(String[] args) {
-        String file_path = "input_files/test01.SWE";
+        System.out.print("Which input file to check? Number: ");
+        Scanner scanner = new Scanner(System.in);
+        String file_path = "input_files/test" + scanner.nextLine() + ".SWE";
+
         ArrayList<String> lines = new ArrayList<>();
 
         try {
