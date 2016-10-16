@@ -32,8 +32,9 @@ public class Decoder {
 
         // Return FALSE if any of the lines between (number+2)th an the end do not follow the following pattern:
         // Upper-case: comma-separated lower-case strings
+
         for (int i = number + 2; i < lines.size(); i++) {
-            if (!lines.get(i).matches("[A-Z]:[a-z,]*[a-z]")) {
+            if (!lines.get(i).matches("[A-Z]:([a-z]+,)*[a-z]+")) {
                 return false;
             }
         }
