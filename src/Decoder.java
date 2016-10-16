@@ -21,16 +21,19 @@ public class Decoder {
         if (!lines.get(1).matches("[a-z]+")) {
             return false;
         }
-        for (int i = number + 2; i < lines.size(); i++) {
-            if (!lines.get(i).matches("[A-Z]:[a-z,]*[a-z]")) {
-                return false;
-            }
-        };
 
         // Return FALSE if any of the lines between 3rd and (number+2)th contains anything different than upper and
         // lower-case letters
         for (int i = 2; i < number + 2; i++) {
             if (!lines.get(i).matches("[A-Za-z]+")) {
+                return false;
+            }
+        }
+
+        // Return FALSE if any of the lines between (number+2)th an the end do not follow the following pattern:
+        // Upper-case: comma-separated lower-case strings
+        for (int i = number + 2; i < lines.size(); i++) {
+            if (!lines.get(i).matches("[A-Z]:[a-z,]*[a-z]")) {
                 return false;
             }
         }
