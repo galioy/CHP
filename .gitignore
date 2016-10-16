@@ -1,2 +1,4 @@
 .idea
 out
+files
+.DS_store
