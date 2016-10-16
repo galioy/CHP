@@ -32,7 +32,6 @@ public class Decoder {
 
         // Return FALSE if any of the lines between (number+2)th an the end do not follow the following pattern:
         // Upper-case: comma-separated lower-case strings
-
         for (int i = number + 2; i < lines.size(); i++) {
             if (!lines.get(i).matches("[A-Z]:([a-z]+,)*[a-z]+")) {
                 return false;
@@ -55,8 +54,11 @@ public class Decoder {
                 lines.add(in.next());
             }
 
-            System.out.println(checkValid(lines));
-//            checkValid(lines);
+            if (checkValid(lines)) {
+                System.out.println("YES");
+            } else {
+                System.out.println("NO");
+            }
         } catch (FileNotFoundException up) {
             System.out.print("File not found: " + file_path);
         }
