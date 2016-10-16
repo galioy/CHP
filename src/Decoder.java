@@ -21,6 +21,11 @@ public class Decoder {
         if (!lines.get(1).matches("[a-z]+")) {
             return false;
         }
+        for (int i = number + 2; i < lines.size(); i++) {
+            if (!lines.get(i).matches("[A-Z]:[a-z,]*[a-z]")) {
+                return false;
+            }
+        };
 
         // return TRUE if all is valid
         return true;
