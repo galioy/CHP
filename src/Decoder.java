@@ -27,6 +27,14 @@ public class Decoder {
             }
         };
 
+        // Return FALSE if any of the lines between 3rd and (number+2)th contains anything different than upper and
+        // lower-case letters
+        for (int i = 2; i < number + 2; i++) {
+            if (!lines.get(i).matches("[A-Za-z]+")) {
+                return false;
+            }
+        }
+
         // return TRUE if all is valid
         return true;
     }
