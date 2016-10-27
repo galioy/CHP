@@ -1,12 +1,14 @@
 import java.io.*;
 import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
 import java.util.Scanner;
 
 /**
  * Created by gako on 16/10/16.
  */
 public class Decoder {
-    private static boolean checkValid(ArrayList<String> lines) {
+    public static boolean checkValid(ArrayList<String> lines) {
         // check first line is an integer
         int number;
         try {
@@ -39,29 +41,26 @@ public class Decoder {
         // return TRUE if all is valid
         return true;
     }
-
-
-    public static void main(String[] args) {
-        System.out.print("Which input file to check? Number: ");
-        Scanner scanner = new Scanner(System.in);
-        String file_path = "input_files/test" + scanner.nextLine() + ".SWE";
-
-        ArrayList<String> lines = new ArrayList<>();
-
-        try {
-            Scanner in = new Scanner(new FileReader(file_path));
-
-            while (in.hasNext()) {
-                lines.add(in.next());
-            }
-
-            if (checkValid(lines)) {
-                System.out.println("YES");
-            } else {
-                System.out.println("NO");
-            }
-        } catch (FileNotFoundException up) {
-            System.out.print("File not found: " + file_path);
+    
+    public static Problem parse(List<String> lines) {
+        Problem result = new Problem();
+    	
+    	int number = Integer.parseInt(lines.get(0));
+    	result.s = lines.get(1);
+    	
+    	for (int i = 2; i < number + 2; i++) {
+    		result.T.add(lines.get(i));
         }
+    	
+    	for (int i = number + 2; i < lines.size(); i++) {
+    		String line = lines.get(i);
+    		
+    		char letter = line.substring(0, 1).toCharArray()[0];
+    		List<String> substrings = new ArrayList<String>(Arrays.asList(line.substring(2).split(",")));
+    		
+    		result.R.put(letter, substrings);
+        }
+    	
+    	return result;
     }
 }
