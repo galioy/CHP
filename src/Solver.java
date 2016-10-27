@@ -13,7 +13,7 @@ public class Solver {
 	public static void main(String[] args) {
         System.out.print("Which input file to check? Number: ");
         Scanner scanner = new Scanner(System.in);
-        String file_path = "gitcode/CHP/input_files/test" + scanner.nextLine() + ".SWE";
+        String file_path = "input_files/test" + scanner.nextLine() + ".SWE";
 
         ArrayList<String> lines = new ArrayList<>();
 
