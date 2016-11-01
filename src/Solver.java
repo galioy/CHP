@@ -65,6 +65,11 @@ public class Solver {
 		if (containsImpossibleTSubstrings(p))
 			return null;
 		
+		// If the simplification caused that there's an R that doesn't have any elements, then that means that
+		// no solution exists
+		if (containsEmptyR(p))
+			return null;
+		
 		Map<Character, Integer> curIndices = new HashMap<Character, Integer>();
 		
 		List<Integer> lengths = new ArrayList<Integer>();
@@ -140,6 +145,15 @@ public class Solver {
 		}
 		
 		return result;
+	}
+	
+	public static boolean containsEmptyR(Problem p) {
+		for (Map.Entry<Character, List<String>> entry : p.R.entrySet()) {
+			if (entry.getValue().size() == 0)
+				return true;
+		}
+		
+		return false;
 	}
 	
 	// Saves the solution to a .SOL file
