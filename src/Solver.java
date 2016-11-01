@@ -157,8 +157,8 @@ public class Solver {
 	
 	// Simplifies the problem using heuristic techniques
 	public static void simplify(Problem p) {
-		removeImpossibleRSubstrings(p);
 		removeNonexistentLetters(p);
+		removeImpossibleRSubstrings(p);
 	}
 
 	// Removes elements of R that are not substrings of s
