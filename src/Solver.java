@@ -34,8 +34,6 @@ public class Solver {
             if (Decoder.checkValid(lines)) {
                 Problem problem = Decoder.parse(lines);
                 
-                simplify(problem);;
-                
                 Map<Character, String> solution = solve(problem);
                 if (solution != null) {
                 	System.out.println("Problem was successfully solved!");
