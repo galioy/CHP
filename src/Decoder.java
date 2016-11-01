@@ -22,19 +22,36 @@ public class Decoder {
             return false;
         }
 
+        List<Character> letters = new ArrayList<Character>();
+        // Return FALSE if any of the lines between (number+2)th an the end do not follow the following pattern:
+        // Upper-case: comma-separated lower-case strings
+        for (int i = number + 2; i < lines.size(); i++) {
+        	letters.add(lines.get(i).charAt(0));
+        	
+            if (!lines.get(i).matches("[A-Z]:([a-z]+,)*[a-z]+")) {
+                return false;
+            }
+        }
+
         // Return FALSE if any of the lines between 3rd and (number+2)th contains anything different than upper and
         // lower-case letters
         for (int i = 2; i < number + 2; i++) {
             if (!lines.get(i).matches("[A-Za-z]+")) {
                 return false;
             }
-        }
-
-        // Return FALSE if any of the lines between (number+2)th an the end do not follow the following pattern:
-        // Upper-case: comma-separated lower-case strings
-        for (int i = number + 2; i < lines.size(); i++) {
-            if (!lines.get(i).matches("[A-Z]:([a-z]+,)*[a-z]+")) {
-                return false;
+            
+            // Check if only uppercase letters that are specified in R are contained within the t
+            List<Character> lineLetters = new ArrayList<Character>();
+            for (char c : lines.get(i).toCharArray()) {
+            	lineLetters.add(c);
+            }
+            
+            lineLetters.removeAll(letters);
+            
+            for (char c : lineLetters) {
+            	if (!(c >= 'a' && c <= 'z')) {
+            		return false;
+            	}
             }
         }
 

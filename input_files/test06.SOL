@@ -1,0 +1,7 @@
+A:e
+B:c
+C:f
+D:b
+E:a
+F:d
+G:g

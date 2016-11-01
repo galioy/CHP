@@ -60,6 +60,11 @@ public class Solver {
 		// Apply heuristic techniques on this instance of the problem and simplify it
 		simplify(p);
 		
+		// Check if the problem can have a solution based on the t-strings and whether they contain
+		// lowercase letters that appear in s
+		if (containsImpossibleTSubstrings(p))
+			return null;
+		
 		Map<Character, Integer> curIndices = new HashMap<Character, Integer>();
 		
 		List<Integer> lengths = new ArrayList<Integer>();
@@ -152,12 +157,12 @@ public class Solver {
 	
 	// Simplifies the problem using heuristic techniques
 	public static void simplify(Problem p) {
-		removeImpossibleSubstrings(p);
+		removeImpossibleRSubstrings(p);
 		removeNonexistentLetters(p);
 	}
 
 	// Removes elements of R that are not substrings of s
-	public static void removeImpossibleSubstrings(Problem p) {
+	public static void removeImpossibleRSubstrings(Problem p) {
 		for (Map.Entry<Character, List<String>> entry : p.R.entrySet()) {
 			Iterator<String> iterator = entry.getValue().iterator();
 			
@@ -167,6 +172,23 @@ public class Solver {
 				}
 			}
 		}
+	}
+	
+	// Removes ts that contain a lowercase letter that doesn't exist in the string s
+	public static boolean containsImpossibleTSubstrings(Problem p) {
+		Iterator iterator = p.T.iterator();
+		
+		while (iterator.hasNext()) {
+			String t = (String) iterator.next();
+			
+			for (char c : t.toCharArray()) {
+				if (c >= 'a' && c <= 'z' && !p.s.contains(c + "")) {
+					return true;
+				}
+			}
+		}
+		
+		return false;
 	}
 	
 	// Removes Rs (letters) that don't appear in any of the ts.
