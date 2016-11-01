@@ -1,5 +1,9 @@
 import java.io.FileNotFoundException;
 import java.io.FileReader;
+import java.io.IOException;
+import java.io.PrintWriter;
+import java.nio.file.Files;
+import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
@@ -10,10 +14,13 @@ import java.util.Scanner;
 
 
 public class Solver {
+	private static final String path = "gitcode/CHP/input_files/";
+	
 	public static void main(String[] args) {
         System.out.print("Which input file to check? Number: ");
         Scanner scanner = new Scanner(System.in);
-        String file_path = "input_files/test" + scanner.nextLine() + ".SWE";
+        String filenumber = scanner.nextLine();
+        String file_path = path + "test" + filenumber + ".SWE";
 
         ArrayList<String> lines = new ArrayList<>();
 
@@ -27,18 +34,26 @@ public class Solver {
             if (Decoder.checkValid(lines)) {
                 Problem problem = Decoder.parse(lines);
                 
+                simplify(problem);;
+                
                 Map<Character, String> solution = solve(problem);
                 if (solution != null) {
                 	System.out.println("Problem was successfully solved!");
                 	System.out.println("The correct combination is " + solution);
+                	
+                	saveSolution(filenumber, solution);
+
+                	System.out.println("The solution has been saved to a file.");
                 } else {
-                	System.out.println("No solution was found for this problem.");
+                	System.out.println("No solution exists for this problem.");
                 }
             } else {
                 System.out.println("The content of the file is not in SWE format.");
             }
-        } catch (FileNotFoundException up) {
+        } catch (FileNotFoundException e) {
             System.out.print("File not found: " + file_path);
+        } catch (IOException e) {
+        	System.out.println("Could not save solution to a file.");
         }
 	}
 	
@@ -91,7 +106,7 @@ public class Solver {
 		// Get a string for each R for this combination
 		int i = 0;
 		for (Map.Entry<Character, Integer> entry : indices.entrySet()) {
-			if (i >= indices.size() - 1)
+			if (i >= indices.size())
 				break;
 			
 			strings.put(entry.getKey(), p.R.get(entry.getKey()).get(entry.getValue()));
@@ -101,6 +116,7 @@ public class Solver {
 		return strings;
 	}
 	
+	// Returns true if the given combination satisfies the problem
 	public static boolean verifyCombination(Problem p, Map<Character, String> combinations) {
 		boolean result = true;
 		for (String t : p.T) {
@@ -108,7 +124,10 @@ public class Solver {
 			
 			String expansion = "";
 			for (char letter : tChars) {
-				expansion += combinations.get(letter);
+				if (combinations.containsKey(letter))
+					expansion += combinations.get(letter);
+				else if (letter >= 'a' && letter <= 'z')
+					expansion += letter;
 			}
 			
 			if (!p.s.contains(expansion)) {
@@ -120,8 +139,27 @@ public class Solver {
 		return result;
 	}
 	
-	// Removes elements of R that are not substrings of s
+	// Saves the solution to a .SOL file
+	public static void saveSolution(String filenumber, Map<Character, String> solution) throws IOException {
+		String solutionAsString = "";
+		
+		for (Map.Entry<Character, String> entry : solution.entrySet()) {
+			solutionAsString += entry.getKey() + ":" + entry.getValue() + "\n";
+		}
+		
+		solutionAsString = solutionAsString.substring(0, solutionAsString.length() - 1);
+		
+		Files.write(Paths.get(path + "test" + filenumber + ".SOL"), solutionAsString.getBytes());
+	}
+	
+	// Simplifies the problem using heuristic techniques
 	public static void simplify(Problem p) {
+		removeImpossibleSubstrings(p);
+		removeNonexistentLetters(p);
+	}
+
+	// Removes elements of R that are not substrings of s
+	public static void removeImpossibleSubstrings(Problem p) {
 		for (Map.Entry<Character, List<String>> entry : p.R.entrySet()) {
 			Iterator<String> iterator = entry.getValue().iterator();
 			
@@ -129,6 +167,28 @@ public class Solver {
 				if (!p.s.contains(iterator.next())) {
 					iterator.remove();
 				}
+			}
+		}
+	}
+	
+	// Removes Rs (letters) that don't appear in any of the ts.
+	public static void removeNonexistentLetters(Problem p) {
+		Iterator iterator = p.R.entrySet().iterator();
+		
+		while (iterator.hasNext()) {
+			Map.Entry<Character, List<String>> entry = (Map.Entry) iterator.next();
+			char letter = entry.getKey();
+			
+			boolean letterExists = false;
+			for (String t : p.T) {
+				if (t.contains(letter + "")) {
+					letterExists = true;
+					break;
+				}
+			}
+			
+			if (!letterExists) {
+				iterator.remove();
 			}
 		}
 	}

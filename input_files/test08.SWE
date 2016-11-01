@@ -1,11 +1,11 @@
 4
 abdde
 A
-B
+aBAA
 C
 D
 A:a,b,c,d,e,f,dd
-B:b,c,d,e,f,dd
+B:x,b,c,d,e,f,dd
 C:a,b,c,d,e,f,dd
 D:a,b,c,d,e,f,dd
 E:aa,bd,c,d,e
